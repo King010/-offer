@@ -1,0 +1,45 @@
+#include"公共头文件.h"
+
+struct ListNode
+{
+	int _value;
+	ListNode*_next;
+	ListNode(int value = 0, ListNode*pnext = NULL)
+		:_value(value)
+		, _next(pnext)
+	{}
+};
+//节点的后一个节点赋值给要删除的节点，再删除这个后面的节点。
+int DelNotTail(ListNode *delnode)
+{
+	if (delnode == NULL)
+		return -1;
+
+	ListNode *pnext = NULL;
+	pnext = delnode->_next;
+	delnode->_value = pnext->_value;
+	delnode->_next = pnext->_next;
+	delete (pnext);
+	pnext = NULL;
+	return 0;
+}
+void Print(ListNode *phead)
+{
+	if (phead == NULL)
+		return;
+	Print(phead->_next);
+	cout << phead->_value << endl;
+}
+void TestDeleteNode()
+{
+	ListNode *l1=new ListNode(1);
+	ListNode *l2 = new ListNode(2);
+	ListNode *l3 = new ListNode(3);
+	ListNode *l4 = new ListNode(4);
+
+	l1->_next = l2;
+	l2->_next = l3;
+	l3->_next = l4;
+	DelNotTail(l2);
+	Print(l1);
+}
