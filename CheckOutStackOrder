@@ -1,0 +1,40 @@
+
+bool CheckOutStackOrder(const vector<int>& v1, const vector<int>& v2)
+{
+	if (v1.size() != v2.size())
+	        return false;
+	stack<int> s;
+	size_t idex1 = 0, idex2 = 0;
+	while (idex2 < v2.size())
+	{
+		while (s.empty() || s.top() != v2[idex2])
+		{
+			if (idex1 < v1.size())
+	        {
+				s.push(v1[idex1++]);
+	        }
+		    else
+	            return false;
+		}
+		    idex2++;
+		    s.pop();
+	}
+	return true;
+}
+void TestCheckOutStackOrder()
+{
+	vector<int> v1;
+	vector<int> v2;
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(3);
+	v1.push_back(4);
+	v1.push_back(5);
+	
+	v2.push_back(4);
+	v2.push_back(5);
+	v2.push_back(2);
+	v2.push_back(3);
+	v2.push_back(1);
+	bool a = CheckOutStackOrder(v1, v2);
+}
