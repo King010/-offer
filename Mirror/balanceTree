@@ -1,0 +1,54 @@
+#include"公共头文件.h"
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+		val(x), left(NULL), right(NULL) {
+	}
+};
+
+void Mirror(TreeNode *pRoot) {
+	if (pRoot == NULL || (pRoot->left == NULL) && (pRoot->right == NULL))
+		return;
+	TreeNode*temp = pRoot->left;
+	pRoot->left = pRoot->right;
+	pRoot->right = temp;
+	if (pRoot->left){
+		Mirror(pRoot->left);
+	}
+	if (pRoot->right){
+		Mirror(pRoot->right);
+	}
+}
+
+bool IsBalanceTree(TreeNode *pRoot)
+{
+	if (pRoot == NULL)
+		return false;
+
+}
+
+int Depth(TreeNode*pRoot)
+{
+	if (pRoot == NULL)
+		return 0;
+	else
+	{
+		int ld = Depth(pRoot->left);
+		int rd = Depth(pRoot->right);
+		return ld > rd ? (ld + 1) : (rd + 1);
+	}
+}
+
+bool IsBalanceTree(TreeNode*pRoot)
+{
+	if (pRoot == NULL)
+		return false;
+	int ld = Depth(pRoot->left);
+	int rd = Depth(pRoot->right);
+	int dif = ld - rd;
+	if (dif > 1 || dif < -1)
+		return false;
+	return IsBalanceTree(pRoot->left) && IsBalanceTree(pRoot->right);
+}
