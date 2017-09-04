@@ -1,0 +1,39 @@
+#include"公共头.h"
+
+
+int Find(int *arr, int n)
+{
+	int *dp = new int[n];
+	int sum = 0;
+	if (arr[0] % n == 0)
+		dp[0] = 1;
+	for (int i = 0; i < n; ++i)
+	{
+		sum = 0;
+		for (int j = 1; j < n; ++j)
+		{
+			sum += arr[j];
+			if (sum%n == 0)
+				dp[i] = max(dp[j],dp[j-1]);
+		}
+	}
+	int big = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		if (dp[i]>big)
+			big = dp[i];
+	}
+	return big;
+}
+
+void Test()
+{
+	int n = 0;
+	cin >> n;
+	int *arr = new int[n];
+	for (int i = 0; i < n; ++i)
+	{
+		cin >> arr[i];
+	}
+	Find(arr, n);
+}
