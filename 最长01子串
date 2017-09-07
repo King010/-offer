@@ -1,0 +1,31 @@
+#include"公共头.h"
+
+int findbig(char *str)
+{
+	int maxlen = 1;
+	int size = strlen(str);
+	for (int i = 1; i < size; ++i)
+	{
+		int tempsize = 1;
+		for (int j = i; j < size; ++j)
+		{
+			if (str[j] != str[j - 1])
+				tempsize++;
+			else
+				break;
+		}
+		if (tempsize>maxlen)
+			maxlen = tempsize;
+	}
+	return maxlen;
+}
+
+void Testfind()
+{
+	char str[100];
+	int i = 0;
+	gets(str);
+	cout<<findbig(str);
+	
+
+}
