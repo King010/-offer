@@ -1,0 +1,133 @@
+#include"公共头文件.h"
+#include<queue>
+
+struct greater
+{
+	bool operator()(int x, int y)
+	{
+		return x > y;   //x,小的优先级高  
+	}
+};
+
+void GetMid(int arr[], int size)
+{
+	priority_queue<int> max_heap;
+	priority_queue< int, vector<int>, greater > min_heap;
+
+	for (int i = 0; i < size; ++i)
+	{
+		//i是从0开始的，所以max存放的数据比较多
+		if ((i & 1) == 1)
+			min_heap.push(arr[i]);
+		else
+			max_heap.push(arr[i]);
+
+		//每次交换最大堆和最小堆中的数据，保证最小堆中的数据大于最大堆中
+		if (!min_heap.empty() && !max_heap.empty())
+		{
+			int temp = min_heap.top();
+			min_heap.pop();
+			max_heap.push(temp);
+
+			temp = max_heap.top();
+			max_heap.pop();
+			min_heap.push(temp);
+		}
+	}
+
+	if ((size & 1) == 0)//偶数
+		cout << "中位数：" << max_heap.top() << " " << min_heap.top() << endl;
+	else
+		cout << "中位数：" << max_heap.top() << endl;
+}
+
+int GetMidNumNoSort2(int *arr, int size)
+{
+	assert(arr);
+	int len = (size + 1) / 2;   //奇数个元素
+	//int len = size / 2;
+	struct Compare    //建小堆
+	{
+		int operator()(int left, int right)
+		{
+			return left > right;
+		}
+	};
+	priority_queue<int, vector<int>, Compare> heap;
+	//先以整个数组的前len个元素建小堆
+	for (int i = 0; i < len; i++)
+	{
+		heap.push(arr[i]);
+	}
+	for (int i = len; i < size; i++)
+	{
+		if (arr[i] > heap.top())  //比堆顶元素大则更新该小堆
+		{
+			heap.pop();
+			heap.push(arr[i]);
+		}
+	}
+	if (!heap.empty())
+	{
+		return heap.top();
+	}
+}
+
+//挖坑法
+int PartSort(int arr[], int left, int right)
+{
+	int key = arr[right];
+	while (left < right)
+	{
+		//key右边，先从左找比key值大
+		while (left < right && arr[left] <= key)
+			++left;
+		if (left < right)
+		{
+			arr[right] = arr[left];
+			--right;
+		}
+		//从右找比key小
+		while (left < right && arr[right] >= key)
+			--right;
+		if (left < right)
+		{
+			arr[left] = arr[right];
+			++left;
+		}
+	}
+	arr[left] = key;
+	return left;
+}
+
+void GetMid3(int arr[], int size)
+{
+	int left = 0;
+	int right = size - 1;
+	int mid = size / 2;
+	int div = PartSort(arr, left, right);
+	while (div != mid)
+	{
+		if (div < mid)//右半区间
+		{
+			div = PartSort(arr, div + 1, right);
+
+		}
+		else
+		{
+			div = PartSort(arr, left, div - 1);
+		}
+	}
+	if (size&1)
+		cout << "中位数" << arr[div] << endl;
+	else
+		cout << "中位数" << arr[div] <<arr[div+1]<< endl;
+
+}
+
+void Testgetmid()
+{
+	int arr[] = { 2, 5, 4, 9, 3, 6, 8, 7, 1, 0 };
+	int size = sizeof(arr) / sizeof(arr[0]);
+	GetMid3(arr, size);
+}
