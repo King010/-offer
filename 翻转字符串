@@ -1,0 +1,32 @@
+#include"公共头文件.h"
+
+void reverse(char*start, char*end)
+{
+	if (start == NULL || end ==NULL)
+		return;
+	while (start < end)
+	{
+		char tmp = *start;
+		*start = *end;
+		*end = tmp;
+		start++;
+		end--;
+	}
+}
+
+void *left(char *s, int pos) //pos 为要旋转的字符个数，或长度
+{
+	int len = strlen(s);
+	reverse(s, s + (pos - 1)); //如上，X->X^T，即abc->cba
+	reverse(s + pos, s + (len - 1)); //如上，Y->Y^T，即def->fed
+	reverse(s, s + (len - 1)); //如上，整个翻转，(X^TY^T)^T=YX，即cbafed->defabc。
+}
+
+void Testreverse()
+{
+	char str[] = "abcdefgh";
+	int length = strlen(str);
+	reverse(str, str+2);
+	reverse(str + 2, str + length-1);
+	reverse(str, str + length-1);
+}
